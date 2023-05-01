@@ -3,9 +3,15 @@ This script will scrape the time, resources, description and title information f
 
 ## Usage
 
+First install dependencies.
+
+```sh
+pip install -r requirements.txt
+```
+
 To parse a list of urls, pass as a parameter the path to the file.
 
-```commandline
+```sh
 python3 main.py lps.txt
 ```
 
