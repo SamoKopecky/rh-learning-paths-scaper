@@ -25,15 +25,17 @@ def read_csv(file_path: str) -> List[str]:
 
 def main(file_path):
     urls = read_csv(file_path)
+    urls_len = len(urls)
     print(f"Found {len(urls)} urls")
     lps_json = []
-    for url in urls:
-        lps_json.append(scrape_learning_path(url).__dict__)
+    for idx, url in enumerate(urls):
+        lps_json.append(scrape_learning_path(url, urls_len, idx + 1).__dict__)
     with open("data.json", "w") as file:
         file.write(json.dumps(lps_json))
 
 
-def scrape_learning_path(url: str) -> LearningPath:
+def scrape_learning_path(url: str, urls_len, idx) -> LearningPath:
+    print(f"Scraping {idx}/{urls_len} -- {url}")
     lp = LearningPath(url)
     req = requests.get(lp.url)
     soup = Bs(req.content, "html.parser")
@@ -46,7 +48,6 @@ def scrape_learning_path(url: str) -> LearningPath:
 
 
 def get_time_and_resources(lp, soup):
-    print(f"Scraping {lp.url}")
     lp_metadata: Bs = soup.find_all("div", class_="lp-hero__meta-data")[0]
     for span in lp_metadata.select("span"):
         span_split = span.text.split(" ")
